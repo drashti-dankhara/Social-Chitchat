@@ -1,0 +1,1 @@
+export const serverInfo = { URL: "http://localhost:5000" }
