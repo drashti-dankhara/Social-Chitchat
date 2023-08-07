@@ -64,7 +64,7 @@ const Register = () => {
             body.append("profilepic", profilepic);
             await axios({
                 method: "post",
-                url: `${serverInfo.URL}/api/auth/registerUser`,
+                url: `${serverInfo.URL}/api/registerUser`,
                 headers: { 'Content-Type': "multipart/form-data" },
                 data: body,
             }).then((res) => {

@@ -18,8 +18,7 @@ const Chats = ({ changeCurrentChat, currentChat, currentSelected }) => {
     const navigate = useNavigate();
     const [currentUser, setCurrentUser] = useState('');
     const [contacts, setContacts] = useState([]);
-    // const [currentSelected, setCurrentSelected] = useState(undefined);
-    // const [currentChat, setCurrentChat] = useState(undefined);
+
 
     useEffect(() => {
         if (!localStorage.getItem("chat-app-user")) {
@@ -60,7 +59,6 @@ const Chats = ({ changeCurrentChat, currentChat, currentSelected }) => {
                     contacts.map((contact, index) => {
                         return (
                             <div className={`userChat ${index === currentSelected ? `selected` : ""}`} key={index} onClick={() => handleChange(index, contact)}>
-
                                 <img src={contact.profilepic} alt="" />
                                 <div className="userChatInfo">
                                     <span>{contact.name}</span>

@@ -208,7 +208,8 @@
         .chat {
             flex: 3;
             border-radius: 15px;
-            overflow: hidden;
+            // overflow: hidden;
+            overflow-y: scroll;
             .chatInfo {
                 height: 50px;
                 background-color: #603F83;
