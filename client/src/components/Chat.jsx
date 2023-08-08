@@ -43,29 +43,50 @@ const Chat = ({ currentChat, currentUser, socket }) => {
     }
 
 
-    const handleSendMsg = async (msg) => {
-        // alert(msg);
+    const handleSendMsg = async (msg, fileList) => {
+        var body = new FormData();
+        body.append("from", currentUser._id);
+        body.append("to", currentChat._id);
+        body.append("message", msg);
+        body.append("img", fileList);
+        console.log(fileList);
+        // files.forEach((file, i) => {
+        //     body.append(`photos`, file, file.name);
+        // });
         await axios({
             method: "post",
             url: `${serverInfo.URL}/api/addMessage`,
-            data: {
-                from: currentUser._id,
-                to: currentChat._id,
-                message: msg
+            headers: {
+                "Content-type": "multipart/form-data",
             },
+            data: body,
+            // data: {
+            //     from: currentUser._id,
+            //     to: currentChat._id,
+            //     message: msg
+            // },
         }).then((res) => {
             console.log(res);
         }).catch((err) => {
             console.log(err.message);
-
             // toast.error(err.response.data.msg, toastOpetions);
         });
 
         socket.current.emit("send-msg", {
             to: currentChat._id,
             from: currentUser._id,
-            message: msg
+            message: msg,
         });
+
+        // console.log(fileList)
+
+        if (fileList) {
+            socket.current.emit("send-img", {
+                to: currentChat._id,
+                from: currentUser._id,
+                img: fileList
+            });
+        }
 
         const msgs = [...messages];
         msgs.push({ fromSelf: true, message: msg });
@@ -73,9 +94,13 @@ const Chat = ({ currentChat, currentUser, socket }) => {
     }
 
     useEffect(() => {
+        console.log(socket.current)
         if (socket.current) {
             socket.current.on("msg-recieve", (msg) => {
                 setArrivalMessage({ fromSelf: false, message: msg })
+            })
+            socket.current.on("img-recieve", (fileList) => {
+                setArrivalMessage({ fromSelf: false, message: fileList })
             })
         }
     }, [])

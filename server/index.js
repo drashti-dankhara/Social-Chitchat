@@ -37,14 +37,14 @@ app.use(fileUpload({
 
 app.use("/api", userRoutes);
 app.use("/api", messageRoutes);
+app.use("/", (req, res) => {
+    res.send("hello ChitChat..!")
+})
 
 
 const server = app.listen(process.env.PORT, () =>
     console.log(`Server is Running on ${process.env.PORT}`)
 );
-
-
-
 
 // ----------------- Socket.io -------------------
 
@@ -69,6 +69,14 @@ io.on("connection", (socket) => {
         const sendUserSocket = onlineUsers.get(data.to);
         if (sendUserSocket) {
             socket.to(sendUserSocket).emit("msg-recieve", data.message);
+        }
+    })
+
+    socket.on("send-img", (data) => {
+        console.log("sendImg : ", data)
+        const sendUserSocket = onlineUsers.get(data.to);
+        if (sendUserSocket) {
+            socket.to(sendUserSocket).emit("img-recieve", data.img);
         }
     })
 })
